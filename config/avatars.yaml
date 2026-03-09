@@ -1,0 +1,61 @@
+# Digital Human Avatars Configuration
+
+# Available Avatars
+avatars:
+  # Professional Presenter
+  presenter:
+    name: "Alex"
+    gender: "male"
+    age_range: "25-35"
+    style: "professional"
+    enabled: true
+    model_path: "models/avatar_presenter.glb"
+    
+  # Casual Host
+  host:
+    name: "Sarah"
+    gender: "female" 
+    age_range: "20-30"
+    style: "casual"
+    enabled: true
+    model_path: "models/avatar_host.glb"
+    
+  # Educational Instructor
+  instructor:
+    name: "Dr. Chen"
+    gender: "male"
+    age_range: "35-50"
+    style: "educational"
+    enabled: true
+    model_path: "models/avatar_instructor.glb"
+
+# Animation Settings
+animations:
+  # Basic Emotions
+  emotions:
+    happy: "animations/happy.json"
+    sad: "animations/sad.json"
+    angry: "animations/angry.json"
+    surprised: "animations/surprised.json"
+    neutral: "animations/neutral.json"
+    
+  # Gestures
+  gestures:
+    wave: "animations/wave.json"
+    nod: "animations/nod.json"
+    shake_head: "animations/shake_head.json"
+    point: "animations/point.json"
+
+# Rendering Settings
+rendering:
+  resolution: "1920x1080"
+  fps: 30
+  background: "virtual_studio"
+  lighting: "studio_lighting"
+  
+# Default Avatar Settings
+defaults:
+  avatar: "presenter"
+  emotion: "neutral"
+  auto_gestures: true
+  lip_sync_enabled: true
