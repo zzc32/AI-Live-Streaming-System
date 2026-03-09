@@ -1,0 +1,60 @@
+# AI Models Configuration
+
+# Text Generation Models
+text_generation:
+  # OpenAI Models
+  openai:
+    enabled: true
+    model: "gpt-3.5-turbo"
+    max_tokens: 150
+    temperature: 0.7
+    
+  # Local Models
+  local:
+    enabled: true
+    model: "microsoft/DialoGPT-medium"
+    max_length: 100
+    
+# Speech Synthesis Models
+speech_synthesis:
+  # Azure Speech Services
+  azure:
+    enabled: true
+    region: ${AZURE_SPEECH_REGION}
+    key: ${AZURE_SPEECH_KEY}
+    voice: "zh-CN-XiaoxiaoNeural"
+    
+  # Google Text-to-Speech
+  google:
+    enabled: false
+    key: ${GOOGLE_CLOUD_API_KEY}
+    voice: "en-US-Wavenet-D"
+    
+  # ElevenLabs
+  elevenlabs:
+    enabled: false
+    api_key: ${ELEVENLABS_API_KEY}
+    voice_id: "21m00Tcm4TlvDq8ikWAM"
+
+# Avatar Animation Models
+avatar_animation:
+  # Emotion Detection
+  emotion_detection:
+    enabled: true
+    model: "j-hartmann/emotion-english-distilroberta-base"
+    
+  # Lip Sync
+  lip_sync:
+    enabled: true
+    model: "Wav2Lip"
+    
+  # Gesture Generation
+  gesture_generation:
+    enabled: true
+    model: "custom/gesture_model"
+
+# Default AI Settings
+defaults:
+  response_timeout: 30
+  fallback_enabled: true
+  cache_responses: true
