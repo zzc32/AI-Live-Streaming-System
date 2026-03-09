@@ -1,0 +1,49 @@
+# Streaming Platforms Configuration
+
+# YouTube Configuration
+youtube:
+  enabled: true
+  api_key: ${YOUTUBE_API_KEY}
+  client_id: ${YOUTUBE_CLIENT_ID}
+  client_secret: ${YOUTUBE_CLIENT_SECRET}
+  stream_key: ${YOUTUBE_STREAM_KEY}
+  rtmp_url: "rtmp://a.rtmp.youtube.com/live2"
+  
+# Twitch Configuration
+twitch:
+  enabled: true
+  client_id: ${TWITCH_CLIENT_ID}
+  client_secret: ${TWITCH_CLIENT_SECRET}
+  access_token: ${TWITCH_ACCESS_TOKEN}
+  stream_key: ${TWITCH_STREAM_KEY}
+  rtmp_url: "rtmp://live.twitch.tv/app"
+
+# TikTok Configuration
+tiktok:
+  enabled: false  # Currently not supported due to API restrictions
+  # Configuration will be added when available
+
+# Facebook Gaming Configuration
+facebook:
+  enabled: false
+  # Configuration will be added when available
+
+# Generic RTMP Configuration
+generic:
+  enabled: true
+  rtmp_url: ${CUSTOM_RTMP_URL}
+  stream_key: ${CUSTOM_STREAM_KEY}
+
+# Default Platform Settings
+defaults:
+  video_bitrate: 4000
+  audio_bitrate: 128
+  resolution: "1920x1080"
+  fps: 30
+  codec: "h264"
+
+# Platform Priority (order of streaming)
+priority:
+  - youtube
+  - twitch
+  - generic

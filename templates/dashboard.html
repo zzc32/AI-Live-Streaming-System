@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Live Streaming System - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            color: #4a5568;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #718096;
+            font-size: 1.1rem;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card h2 {
+            color: #4a5568;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-online {
+            background: #48bb78;
+        }
+        
+        .status-offline {
+            background: #e53e3e;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #f56565, #e53e3e);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+        }
+        
+        .stream-preview {
+            background: #2d3748;
+            border-radius: 10px;
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+        
+        .stream-preview video {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 8px;
+            background: #1a202c;
+        }
+        
+        .chat-box {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .chat-message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chat-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: #edf2f7;
+            border-radius: 8px;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4a5568;
+        }
+        
+        .stat-label {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+        
+        .platform-select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 AI Live Streaming System</h1>
+            <p>Advanced AI-powered digital human streaming with real-time interaction</p>
+        </div>
+        
+        <div class="dashboard-grid">
+            <!-- Streaming Control Card -->
+            <div class="card">
+                <h2>🎬 Streaming Control</h2>
+                <div class="status">
+                    <span class="status-indicator status-offline" id="statusIndicator"></span>
+                    <span id="statusText">Offline</span>
+                </div>
+                
+                <select class="platform-select" id="platformSelect">
+                    <option value="youtube">YouTube</option>
+                    <option value="twitch">Twitch</option>
+                    <option value="generic">Custom RTMP</option>
+                </select>
+                
+                <button class="btn btn-success" id="startStreamBtn" onclick="startStream()">Start Streaming</button>
+                <button class="btn btn-danger" id="stopStreamBtn" onclick="stopStream()" disabled>Stop Streaming</button>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value" id="viewersCount">0</div>
+                        <div class="stat-label">Viewers</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="chatMessages">0</div>
+                        <div class="stat-label">Chat Messages</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="streamDuration">00:00</div>
+                        <div class="stat-label">Duration</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Avatar Control Card -->
+            <div class="card">
+                <h2>👤 AI Avatar</h2>
+                <div class="stream-preview">
+                    <div id="avatarPreview">Avatar Preview</div>
+                </div>
+                
+                <div style="margin-top: 15px;">
+                    <label>Select Avatar:</label>
+                    <select class="platform-select" id="avatarSelect">
+                        <option value="presenter">Professional Presenter</option>
+                        <option value="host">Casual Host</option>
+                        <option value="instructor">Educational Instructor</option>
+                    </select>
+                </div>
+                
+                <div style="margin-top: 15px;">
+                    <button class="btn" onclick="changeAvatar()">Change Avatar</button>
+                    <button class="btn" onclick="testAnimation()">Test Animation</button>
+                </div>
+            </div>
+            
+            <!-- Chat Interaction Card -->
+            <div class="card">
+                <h2>💬 Live Chat</h2>
+                <div class="chat-box" id="chatBox">
+                    <div class="chat-message">
+                        <strong>System:</strong> Welcome to AI Live Streaming System!
+                    </div>
+                </div>
+                
+                <input type="text" class="chat-input" id="chatInput" placeholder="Type your message..." onkeypress="handleChatInput(event)">
+                <button class="btn" onclick="sendChatMessage()">Send Message</button>
+            </div>
+            
+            <!-- System Status Card -->
+            <div class="card">
+                <h2>⚙️ System Status</h2>
+                <div id="systemStatus">
+                    <p>AI Engine: <span class="status-indicator status-online"></span> Ready</p>
+                    <p>Streaming: <span class="status-indicator status-offline"></span> Offline</p>
+                    <p>Audio: <span class="status-indicator status-online"></span> Ready</p>
+                    <p>Video: <span class="status-indicator status-online"></span> Ready</p>
+                </div>
+                
+                <div style="margin-top: 15px;">
+                    <button class="btn" onclick="refreshStatus()">Refresh Status</button>
+                    <button class="btn" onclick="showLogs()">View Logs</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // WebSocket connection for real-time updates
+        const socket = new WebSocket('ws://localhost:5000');
+        
+        socket.onopen = function(event) {
+            console.log('WebSocket connected');
+        };
+        
+        socket.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            handleWebSocketMessage(data);
+        };
+        
+        function handleWebSocketMessage(data) {
+            if (data.type === 'stream_status') {
+                updateStreamStatus(data.streaming);
+            } else if (data.type === 'chat_response') {
+                addChatMessage('AI', data.response);
+            } else if (data.type === 'viewer_count') {
+                updateViewerCount(data.count);
+            }
+        }
+        
+        function updateStreamStatus(isStreaming) {
+            const indicator = document.getElementById('statusIndicator');
+            const statusText = document.getElementById('statusText');
+            const startBtn = document.getElementById('startStreamBtn');
+            const stopBtn = document.getElementById('stopStreamBtn');
+            
+            if (isStreaming) {
+                indicator.className = 'status-indicator status-online';
+                statusText.textContent = 'Live Streaming';
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+            } else {
+                indicator.className = 'status-indicator status-offline';
+                statusText.textContent = 'Offline';
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+            }
+        }
+        
+        function startStream() {
+            const platform = document.getElementById('platformSelect').value;
+            fetch('/api/stream/start', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({platform: platform})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    addChatMessage('System', `Stream started on ${platform}`);
+                } else {
+                    alert('Failed to start stream: ' + data.message);
+                }
+            });
+        }
+        
+        function stopStream() {
+            fetch('/api/stream/stop', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    addChatMessage('System', 'Stream stopped');
+                } else {
+                    alert('Failed to stop stream: ' + data.message);
+                }
+            });
+        }
+        
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                addChatMessage('You', message);
+                input.value = '';
+                
+                // Send to AI for processing
+                fetch('/api/chat/send', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({message: message})
+                });
+            }
+        }
+        
+        function handleChatInput(event) {
+            if (event.key === 'Enter') {
+                sendChatMessage();
+            }
+        }
+        
+        function addChatMessage(sender, message) {
+            const chatBox = document.getElementById('chatBox');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message';
+            messageDiv.innerHTML = `<strong>${sender}:</strong> ${message}`;
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            
+            // Update chat message count
+            const messageCount = document.getElementById('chatMessages');
+            messageCount.textContent = parseInt(messageCount.textContent) + 1;
+        }
+        
+        function updateViewerCount(count) {
+            document.getElementById('viewersCount').textContent = count;
+        }
+        
+        function changeAvatar() {
+            const avatar = document.getElementById('avatarSelect').value;
+            addChatMessage('System', `Changing avatar to: ${avatar}`);
+        }
+        
+        function testAnimation() {
+            addChatMessage('System', 'Testing avatar animation...');
+        }
+        
+        function refreshStatus() {
+            fetch('/api/status')
+            .then(response => response.json())
+            .then(data => {
+                console.log('System status:', data);
+            });
+        }
+        
+        function showLogs() {
+            alert('Log viewer would open here');
+        }
+        
+        // Initialize dashboard
+        updateStreamStatus(false);
+    </script>
+</body>
+</html>
